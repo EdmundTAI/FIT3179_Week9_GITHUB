@@ -1,0 +1,36 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Total Death Confirmed From Jan 3 2020 to Sep 20 2023",
+    "width": 800,
+    "height": 400,
+    "projection": {"type": "equalEarth"},
+    "data": {
+      "url": "https://raw.githubusercontent.com/EdmundTAI/FIT3179_Week9_GITHUB/main/js/ne_110m_admin_0_countries.topojson",
+      "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+    },
+    "transform": [
+      {
+        "lookup": "properties.NAME",
+        "from": {
+          "data": {
+            "url": "https://raw.githubusercontent.com/EdmundTAI/FIT3179_Week9_GITHUB/main/data/choroplethMapCOVID19.csv"
+          },
+          "key": "Country",
+          "fields": ["TotalDeath"]
+        }
+      },
+      {"calculate": "datum.TotalDeath + 0.1", "as": "Total Death"}
+    ],
+    "mark": {"type": "geoshape"},
+    "encoding": {
+      "color": {
+        "field": "Total Death",
+        "type": "quantitative",
+        "scale": {"type": "log"}
+      },
+      "tooltip": [
+        {"field": "properties.NAME", "type": "nominal", "title":"Country"},
+        {"field": "Total Death", "type": "quantitative"}
+      ]
+    }
+  }
